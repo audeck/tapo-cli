@@ -301,9 +301,10 @@ def list_videos(days, offset):
 
 @click.command()
 @click.option('--days', default=1, prompt="Last X days", help='Last X days which you want to download videos for.')
+@click.option('--offset', default=0, prompt="Offset start by Y days", help='Offsets the start date from which "Last X days" is calculated Y days into the past.')
 @click.option('--path', default="~/", prompt="Path", help='Path where you want your videos to be downloaded. It will create directories based on dates.')
 @click.option('--overwrite', default=0, prompt="Overwrite", help='Overwrite any files using the same name in the same location.')
-def download_videos(days, path, overwrite):
+def download_videos(days, offset, path, overwrite):
     """Downloads videos for the last X days to path."""
     get_config() # Checks if logged in
     
@@ -314,7 +315,7 @@ def download_videos(days, path, overwrite):
     content = '{"deviceTypeList":["SMART.IPCAMERA"],"index":0,"limit":20}'
     devs = probe_endpoint_post(content, endpoint)
     
-    end_unixtime = time.time() + 86400
+    end_unixtime = time.time() + 86400 - (offset * 86400)
     start_unixtime = end_unixtime - (days + 1) * 86400
     end_time = datetime.datetime.utcfromtimestamp(end_unixtime).strftime('%Y-%m-%d 00:00:00')
     start_time = datetime.datetime.utcfromtimestamp(start_unixtime).strftime('%Y-%m-%d 00:00:00')
