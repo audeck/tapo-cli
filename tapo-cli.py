@@ -275,6 +275,7 @@ def mfa_status():
 
 @click.command()
 @click.option('--days', default=1, prompt="Last X days", help='Last X days which you want to list videos for.')
+@click.option('--offset', default=0, prompt="Offset start by Y days", help='Offsets the start date from which "Last X days" is calculated Y days into the past.')
 def list_videos(days):
     """Lists videos for the last X days."""
     get_config() # Checks if logged in
@@ -282,7 +283,7 @@ def list_videos(days):
     content = '{"deviceTypeList":["SMART.IPCAMERA"],"index":0,"limit":20}'
     devs = probe_endpoint_post(content, endpoint)
     
-    end_unixtime = time.time() + 86400
+    end_unixtime = time.time() + 86400 - (offset * 86400)
     start_unixtime = end_unixtime - (days + 1) * 86400
     end_time = datetime.datetime.utcfromtimestamp(end_unixtime).strftime('%Y-%m-%d 00:00:00')
     start_time = datetime.datetime.utcfromtimestamp(start_unixtime).strftime('%Y-%m-%d 00:00:00')
