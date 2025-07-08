@@ -276,7 +276,7 @@ def mfa_status():
 @click.command()
 @click.option('--days', default=1, prompt="Last X days", help='Last X days which you want to list videos for.')
 @click.option('--offset', default=0, prompt="Offset start by Y days", help='Offsets the start date from which "Last X days" is calculated Y days into the past.')
-def list_videos(days):
+def list_videos(days, offset):
     """Lists videos for the last X days."""
     get_config() # Checks if logged in
     endpoint = '/api/v2/common/getDeviceListByPage'
